@@ -10,10 +10,18 @@
 </head>
 <body>
   <h1 class="page-heading">All countries in the world</h1>
-  
-  <div class="sort-options">
-    <button class="sort-button" type="button">Sort A - Z</button>
+
+  <div class="sort-options dropdown">
+    <button onclick="toggleShowDropdown()" class="sort-button dropbtn">Sort</button>
+    <div id="js-dropdown" class="dropdown-content">
+      <span class="dropdown-item sort-alphabet">Name (Z - A)</span>
+      <span class="dropdown-item sort-population">Population (Desc)</span>
+    </div>
   </div>
+  
+  <!-- <div class="sort-options">
+    <button class="sort-button" type="button">Sort A - Z</button>
+  </div> -->
 
   <div class="container">
     <ul class="countries">

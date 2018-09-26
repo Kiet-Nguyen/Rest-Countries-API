@@ -1,7 +1,9 @@
 const elements = {
   container: document.querySelector('.container'),
   countriesContainer: document.querySelector('.countries'),
-  sortBtn: document.querySelector('.sort-button')
+  sortAlphabet: document.querySelector('.sort-alphabet'),
+  sortPopulation: document.querySelector('.sort-population'),
+  dropdownBtn: document.querySelector('#js-dropdown')
 };
 
 const requestData = async () => {
@@ -12,15 +14,30 @@ const requestData = async () => {
   // Generate country
   namesAndFlags(resultArr);
 
-  // Collapse buttons
-  const collapseBtns = document.querySelectorAll('.collapsible');
-  createCollapseBtns(collapseBtns);
-
-  elements.sortBtn.addEventListener('click', () => {
-    sortAlphabet(resultArr);
+  // Sort
+  elements.sortAlphabet.addEventListener('click', () => {
+    if (elements.sortAlphabet.innerHTML === 'Name (Z - A)') {
+      sortAlphabet(resultArr, true);
+      elements.sortAlphabet.innerHTML = 'Name (A - Z)';
+    } else {
+      sortAlphabet(resultArr, false);
+      elements.sortAlphabet.innerHTML = 'Name (Z - A)';
+    }
     namesAndFlags(resultArr);
-    console.log('sortAlphabet(resultArr)', sortAlphabet(resultArr));
   });
+
+  elements.sortPopulation.addEventListener('click', () => {
+    if (elements.sortPopulation.innerHTML === 'Population (Desc)') {
+      sortPopulation(resultArr, true);
+      elements.sortPopulation.innerHTML = 'Population (Ascen)';
+    } else {
+      sortPopulation(resultArr, false);
+      elements.sortPopulation.innerHTML = 'Population (Desc)';
+    }
+
+    namesAndFlags(resultArr);
+  });
+
   // resultArr.forEach(result => {
   //   console.log(result.flag);
   // });
@@ -28,6 +45,7 @@ const requestData = async () => {
 
 const namesAndFlags = arr => {
   let reverseArr = arr.slice().reverse();
+
   // Insert li items
   reverseArr.forEach(element => {
     elements.countriesContainer.insertAdjacentHTML(
@@ -49,9 +67,13 @@ const namesAndFlags = arr => {
       `
     );
   });
+
+  // Each element.name is a collapsible item
+  const collapseBtns = document.querySelectorAll('.collapsible');
+  handleCollapse(collapseBtns);
 };
 
-const createCollapseBtns = arr => {
+const handleCollapse = arr => {
   arr.forEach(btn => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('active');
@@ -64,14 +86,51 @@ const createCollapseBtns = arr => {
   });
 };
 
-const sortAlphabet = arr => {
+const sortAlphabet = (arr, descending) => {
+  // Check descending and ascending
+  const mod = descending ? 1 : -1;
+
   arr.sort((a, b) => {
-    if (a.name < b.name) {
-      return 1;
-    } else if (a.name > b.name) {
-      return -1;
+    let valueA = a.name.toUpperCase();
+    let valueB = b.name.toUpperCase();
+
+    if (valueA < valueB) {
+      return 1 * mod;
+    } else if (valueA > valueB) {
+      return -1 * mod;
     }
   });
+};
+
+const sortPopulation = (arr, descending) => {
+  const mod = descending ? 1 : -1;
+
+  arr.sort((a, b) => {
+    if (a.population < b.population) {
+      return 1 * mod;
+    } else if (a.population > b.population) {
+      return -1 * mod;
+    }
+  });
+};
+
+const toggleShowDropdown = () => {
+  elements.dropdownBtn.classList.toggle('show');
+};
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = event => {
+  if (!event.target.matches('.dropbtn')) {
+    const dropdowns = document.getElementsByClassName('dropdown-content');
+    let index;
+    for (index = 0; index < dropdowns.length; index++) {
+      let openDropdown = dropdowns[index];
+
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
 };
 
 // Init

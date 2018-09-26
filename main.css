@@ -28,6 +28,11 @@ li {
   list-style: none;
 }
 
+button:focus,
+button:active {
+  outline: none;
+}
+
 .sort-options {
   width: 100%;
   padding: 4rem 2rem;
@@ -39,6 +44,13 @@ li {
   color: var(--dark-green);
   font-size: 1rem;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sort-button:hover {
+  background-color: var(--dark-green);
+  color: var(--gray);
 }
 
 .container {
@@ -72,7 +84,6 @@ li {
   justify-content: space-between;
   align-items: center;
   font-size: 0.8rem;
-  transition: all 0.2s;
 }
 
 .arrow {
@@ -86,13 +97,12 @@ li {
 
 .collapsible.active .arrow {
   margin-top: -8px;
-  border-bottom-color: var(--yellow);
+  border-bottom-color: var(--dark-green);
   border-top-color: transparent;
 }
 
 .active, 
 .collapsible:hover {
-  /* background-color: var(--yellow); */
   color: var(--dark-green);
 }
 
@@ -114,4 +124,38 @@ li {
 .country-name {
   margin-top: 0.5rem;
   text-align: center;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--yellow);
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 2px 2px 7px -1px var(--dark-green);
+  z-index: 1;
+}
+
+.dropdown-item {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: var(--dark-green);
+  color: var(--gray);
+}
+
+.show {
+  display: block;
 }
