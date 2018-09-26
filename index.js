@@ -3,8 +3,12 @@ const elements = {
   countriesContainer: document.querySelector('.countries'),
   sortAlphabet: document.querySelector('.sort-alphabet'),
   sortPopulation: document.querySelector('.sort-population'),
-  dropdownBtn: document.querySelector('#js-dropdown')
+  dropdownBtn: document.querySelector('#js-dropdown'),
+  searchInput: document.querySelector('.search-input'),
+  searchBtn: document.querySelector('.js-search')
 };
+
+let searchInputValue;
 
 const requestData = async () => {
   const requestURL = 'https://restcountries.eu/rest/v2/all';
@@ -12,66 +16,72 @@ const requestData = async () => {
   const resultArr = await respond.json();
 
   // Generate country
-  namesAndFlags(resultArr);
+  generateEachCountry(resultArr);
 
-  // Sort
+  // Sort Name
   elements.sortAlphabet.addEventListener('click', () => {
     if (elements.sortAlphabet.innerHTML === 'Name (Z - A)') {
-      sortAlphabet(resultArr, true);
+      sortCountryName(resultArr, true);
       elements.sortAlphabet.innerHTML = 'Name (A - Z)';
     } else {
-      sortAlphabet(resultArr, false);
+      sortCountryName(resultArr, false);
       elements.sortAlphabet.innerHTML = 'Name (Z - A)';
     }
-    namesAndFlags(resultArr);
+    generateEachCountry(resultArr);
   });
 
+  // Sort population
   elements.sortPopulation.addEventListener('click', () => {
-    if (elements.sortPopulation.innerHTML === 'Population (Desc)') {
-      sortPopulation(resultArr, true);
-      elements.sortPopulation.innerHTML = 'Population (Ascen)';
+    if (elements.sortPopulation.innerHTML === 'Population (DESC)') {
+      sortCountryPopulation(resultArr, true);
+      elements.sortPopulation.innerHTML = 'Population (ASC)';
     } else {
-      sortPopulation(resultArr, false);
-      elements.sortPopulation.innerHTML = 'Population (Desc)';
+      sortCountryPopulation(resultArr, false);
+      elements.sortPopulation.innerHTML = 'Population (DESC)';
     }
-
-    namesAndFlags(resultArr);
+    generateEachCountry(resultArr);
   });
 
-  // resultArr.forEach(result => {
-  //   console.log(result.flag);
-  // });
+  // Search
+  elements.searchBtn.addEventListener('click', () => {
+    elements.countriesContainer.innerHTML = '';
+    searchCountry(resultArr);
+  });
 };
 
-const namesAndFlags = arr => {
+const generateEachCountry = arr => {
   let reverseArr = arr.slice().reverse();
 
   // Insert li items
-  reverseArr.forEach(element => {
+  reverseArr.forEach(country => {
     elements.countriesContainer.insertAdjacentHTML(
       'afterbegin',
       `
         <li>
-          <img class="img-responsive" src="${element.flag}" alt="Country flag">
+          <img class="img-responsive" src="${country.flag}" alt="Country flag">
           <p class="country-name collapsible">
-            ${element.name}
+            ${country.name}
             <span class="arrow"></span>
           </p>
           <div class="collapsible-content">
-            <p>Capital: ${element.capital}</p>
-            <p>Population: ${element.population}</p>
-            <p>Region: ${element.region}</p>
-            <p>Latlng: ${element.latlng[0]} ${element.latlng[1]}</p>
+            <p>Capital: ${country.capital}</p>
+            <p>Population: ${country.population}</p>
+            <p>Region: ${country.region}</p>
+            <p>Latlng: ${country.latlng[0]} ${country.latlng[1]}</p>
           </div>
         </li>
       `
     );
   });
 
-  // Each element.name is a collapsible item
+  // Each element.name is a collapsible element
   const collapseBtns = document.querySelectorAll('.collapsible');
   handleCollapse(collapseBtns);
 };
+
+/**
+ * Each country name is a collapsible element
+ **/
 
 const handleCollapse = arr => {
   arr.forEach(btn => {
@@ -79,14 +89,18 @@ const handleCollapse = arr => {
       btn.classList.toggle('active');
       let content = btn.nextElementSibling;
 
-      content.style.display === 'block'
+      content.style.display === 'inline-block'
         ? (content.style.display = 'none')
-        : (content.style.display = 'block');
+        : (content.style.display = 'inline-block');
     });
   });
 };
 
-const sortAlphabet = (arr, descending) => {
+/**
+ * Sort options
+ */
+
+const sortCountryName = (arr, descending) => {
   // Check descending and ascending
   const mod = descending ? 1 : -1;
 
@@ -102,7 +116,7 @@ const sortAlphabet = (arr, descending) => {
   });
 };
 
-const sortPopulation = (arr, descending) => {
+const sortCountryPopulation = (arr, descending) => {
   const mod = descending ? 1 : -1;
 
   arr.sort((a, b) => {
@@ -114,13 +128,16 @@ const sortPopulation = (arr, descending) => {
   });
 };
 
+/**
+ * Dropdown to choose sort options
+ **/
 const toggleShowDropdown = () => {
   elements.dropdownBtn.classList.toggle('show');
 };
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = event => {
-  if (!event.target.matches('.dropbtn')) {
+  if (!event.target.matches('.drop-btn')) {
     const dropdowns = document.getElementsByClassName('dropdown-content');
     let index;
     for (index = 0; index < dropdowns.length; index++) {
@@ -131,6 +148,49 @@ window.onclick = event => {
       }
     }
   }
+};
+
+/**
+ * Search
+ **/
+const searchCountry = arr => {
+  searchInputValue = elements.searchInput.value.toUpperCase();
+
+  arr.forEach(country => {
+    let name = country.name.toUpperCase();
+    let partOfName = name.substring(0, searchInputValue.length);
+    let capital = country.capital.toUpperCase();
+    let partOfCapital = capital.substring(0, searchInputValue.length);
+    let region = country.region.toUpperCase();
+    let partOfRegion = region.substring(0, searchInputValue.length);
+    // let language = country.languages
+    // console.log('language', language);
+
+    if (
+      partOfName == searchInputValue ||
+      partOfCapital == searchInputValue ||
+      partOfRegion == searchInputValue
+    ) {
+      elements.countriesContainer.insertAdjacentHTML(
+        'afterbegin',
+        `
+          <div>
+            <div class="">
+              <img class="img-responsive" src="${country.flag}" alt="Country flag">
+              <h2 class="country-name">${country.name}</h2>
+            </div>
+
+            <div class="">
+              <p>Capital: ${country.capital}</p>
+              <p>Population: ${country.population}</p>
+              <p>Region: ${country.region}</p>
+              <p>Latlng: ${country.latlng[0]} ${country.latlng[1]}</p>
+            </div>
+          </div>
+        `
+      );
+    }
+  });
 };
 
 // Init

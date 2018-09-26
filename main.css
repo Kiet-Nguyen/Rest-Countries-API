@@ -9,6 +9,7 @@
   --dark-green: #173e43;
   --light-green: #3fb0ac;
   --gray: #dddfd4;
+  
   --yellow: #fae596;
 }
 
@@ -33,22 +34,27 @@ button:active {
   outline: none;
 }
 
-.sort-options {
-  width: 100%;
+/**
+  * Sort button
+**/
+
+.button-container {
+  display: inline-block;
   padding: 4rem 2rem;
 }
 
-.sort-button {
-  padding: 1rem 2rem;
+.btn {
+  padding: 1rem 3rem;
   background-color: var(--yellow);
   color: var(--dark-green);
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
+  box-shadow: 2px 2px 7px -1px var(--dark-green);
   transition: all 0.2s;
 }
 
-.sort-button:hover {
+.btn:hover {
   background-color: var(--dark-green);
   color: var(--gray);
 }
@@ -144,7 +150,7 @@ button:active {
 
 .dropdown-item {
   color: black;
-  padding: 12px 16px;
+  padding: 1rem 1.35rem;
   text-decoration: none;
   display: block;
   cursor: pointer;
@@ -158,4 +164,56 @@ button:active {
 
 .show {
   display: block;
+}
+
+/**
+  * Search button
+**/
+.search-container {
+  display: inline-block;
+  position: relative;
+}
+
+.search-input {
+  border: 1px solid var(--gray);
+  width: 30rem;
+  margin-left: -5px;
+  padding: 1rem;
+  font-size: 1rem;
+  text-align: center;
+  color: var(--light-green);
+  box-shadow: 2px 2px 7px -1px var(--gray);
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--light-green);
+}
+
+.search-input:focus::placeholder {
+  color: transparent;
+}
+
+.search-icon {
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  top: 13px;
+  right: 20px;
+  z-index: 20;
+}
+
+.country-info-container {
+  /* display: flex; */
+  width: 1000px;
+  margin: auto;
+  max-width: 100%;
+}
+
+.name-flags {
+  display: flex;
+  justify-content: center;
 }

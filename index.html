@@ -11,17 +11,22 @@
 <body>
   <h1 class="page-heading">All countries in the world</h1>
 
-  <div class="sort-options dropdown">
-    <button onclick="toggleShowDropdown()" class="sort-button dropbtn">Sort</button>
+  <div class="button-container dropdown">
+    <button onclick="toggleShowDropdown()" class="btn sort-button drop-btn">Sort</button>
     <div id="js-dropdown" class="dropdown-content">
       <span class="dropdown-item sort-alphabet">Name (Z - A)</span>
-      <span class="dropdown-item sort-population">Population (Desc)</span>
+      <span class="dropdown-item sort-population">Population (DESC)</span>
     </div>
   </div>
   
-  <!-- <div class="sort-options">
-    <button class="sort-button" type="button">Sort A - Z</button>
-  </div> -->
+  <div class="button-container">
+    <button class="btn search-button js-search" type="button">Search</button>
+
+    <div class="search-container">
+      <input class="search-input" type="text" placeholder="Name, capital, region">
+      <img class="search-icon" src="./img/magnifying-glass.svg" alt="Search icon">
+    </div>
+  </div>
 
   <div class="container">
     <ul class="countries">
@@ -29,7 +34,19 @@
     </ul>
   </div>
 
-
+  <!-- <div class="country-info-container">
+    <div class="name-flags">
+      <img class="" src="https://restcountries.eu/data/vnm.svg" alt="Country flag">
+      <h2>Viet Name</h2>
+    </div>
+    
+    <div class="info">
+      <p>Capital: Hanoi</p>
+      <p>Population: 92700000</p>
+      <p>Region: Asia</p>
+      <p>Latlng: 16.16666666 107.83333333</p>
+    </div>
+  </div> -->
 
   <script src="index.js"></script>
 </body>
