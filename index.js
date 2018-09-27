@@ -5,7 +5,8 @@ const elements = {
   sortPopulation: document.querySelector('.sort-population'),
   dropdownBtn: document.querySelector('#js-dropdown'),
   searchInput: document.querySelector('.search-input'),
-  searchBtn: document.querySelector('.js-search')
+  searchBtn: document.querySelector('.js-search'),
+  searchResult: document.querySelector('.js-search-result')
 };
 
 let searchInputValue;
@@ -46,6 +47,7 @@ const requestData = async () => {
   elements.searchBtn.addEventListener('click', () => {
     elements.countriesContainer.innerHTML = '';
     searchCountry(resultArr);
+    elements.searchInput.value = '';
   });
 };
 
@@ -153,6 +155,7 @@ window.onclick = event => {
 /**
  * Search
  **/
+
 const searchCountry = arr => {
   searchInputValue = elements.searchInput.value.toUpperCase();
 
@@ -163,33 +166,48 @@ const searchCountry = arr => {
     let partOfCapital = capital.substring(0, searchInputValue.length);
     let region = country.region.toUpperCase();
     let partOfRegion = region.substring(0, searchInputValue.length);
-    // let language = country.languages
-    // console.log('language', language);
 
     if (
       partOfName == searchInputValue ||
       partOfCapital == searchInputValue ||
       partOfRegion == searchInputValue
     ) {
-      elements.countriesContainer.insertAdjacentHTML(
+      elements.searchResult.insertAdjacentHTML(
         'afterbegin',
         `
-          <div>
-            <div class="">
-              <img class="img-responsive" src="${country.flag}" alt="Country flag">
-              <h2 class="country-name">${country.name}</h2>
-            </div>
-
-            <div class="">
-              <p>Capital: ${country.capital}</p>
-              <p>Population: ${country.population}</p>
-              <p>Region: ${country.region}</p>
-              <p>Latlng: ${country.latlng[0]} ${country.latlng[1]}</p>
+          <div class="search-result-container">
+            <div id="map" class="map"></div>
+            
+            <div class="country-info-container">
+              <div class="name-flags">
+                <img class="flag" src="${country.flag}" alt="Country flag">
+                <h2>${country.name}</h2>
+              </div>
+            
+              <div class="info">
+                <p>Capital: ${country.capital}</p>
+                <p>Population: ${country.population}</p>
+                <p>Region: ${country.region}</p>
+                <p>Latlng: ${country.latlng[0]} ${country.latlng[1]}</p>
+              </div>
             </div>
           </div>
         `
       );
     }
+
+    const map = new ol.Map({
+      target: 'map',
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([country.latlng[1], country.latlng[0]]),
+        zoom: 3
+      })
+    });
   });
 };
 
