@@ -2,7 +2,7 @@
 Live demo for this project - [Live demo](https://kiet-nguyen.github.io/Rest-Countries-API/)
 
 ## Description
-Countries information from this project comes from [Rest countries](https://restcountries.eu/rest/v2/all).
+Countries information from this project comes from [Rest countries](https://restcountries.eu/).
 
 * Display information of each country.
 * Sort countries by name or population
